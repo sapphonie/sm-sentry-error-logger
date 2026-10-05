@@ -90,7 +90,7 @@ void SMErrorLogReader::WatchErrorLog ()
     }
 }
 
-void SMErrorLogReader::Stop()
+SMErrorLogReader::~SMErrorLogReader()
 {
     //Trigger the condition variable to stop waiting early so we can join and stop the thread now.
     printf("Attempting to stop WatchErrorLog thread...\n");

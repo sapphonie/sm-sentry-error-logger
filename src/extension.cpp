@@ -170,7 +170,7 @@ bool CTFErrorLogger::SDK_OnLoad(char* error, size_t maxlength, bool late)
 
 void CTFErrorLogger::SDK_OnUnload()
 {
-	if(errorLogWatcher != nullptr) errorLogWatcher->Stop();
+	errorLogWatcher.reset();
 	auto spEngine = g_pSM->GetScriptingEngine();
 	if(debugListener.oldListener != nullptr) spEngine->SetDebugListener(debugListener.oldListener);
 	sentry_close();

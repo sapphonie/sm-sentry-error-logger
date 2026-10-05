@@ -27,9 +27,9 @@ class SMErrorLogReader
 
 		SMErrorLogReader(std::string& _errorLogPath, ConVar* _waitTime, ConVar* silent);
 		/// <summary>
-		/// Stop the error log watcher thread.
+		/// Stop and join the error log watcher thread.
 		/// </summary>
-		void Stop();
+		~SMErrorLogReader();
 
 	private:
 		bool active;
