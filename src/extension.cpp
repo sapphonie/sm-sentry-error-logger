@@ -30,7 +30,6 @@ SMEXT_LINK(&g_Sample);
 
 DebugListener debugListener;
 shared_ptr<CTFErrorLoggerConfig> config;
-unique_ptr<SMErrorLogReader> errorLogWatcher;
 bool setup = false;
 
 //Callback so we can setup the extension when the sentry url convar has been set.
@@ -54,6 +53,9 @@ ConVar ce_region("ce_region", "EU", 0, "Server Region");
 ConVar ce_logreaderwaittime("ce_logreaderwaittime", "120", 0, "Wait time in seconds between each error log read");
 ConVar ce_type("ce_type", "", 0, "Server Type");
 ConVar ce_silent("ce_silent", "", 0, "If extension logging is disabled");
+
+//Declared after the ConVars so it is destroyed first: the watcher thread reads ce_silent.
+unique_ptr<SMErrorLogReader> errorLogWatcher;
 
 /** 
  * Class to allow our convars to be properly registered.
