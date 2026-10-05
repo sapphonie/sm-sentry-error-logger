@@ -106,16 +106,27 @@ filesystem::path SMErrorLogReader::GetLatestErrorLogPath()
 {
     filesystem::path newestErrorLogPath;
     filesystem::file_time_type lastModifyTime;
-    for (const auto &entry : filesystem::directory_iterator(errorLogPath))
+    //Catch filesystem errors (logs folder missing, file deleted during the scan). An uncaught exception stops the server.
+    try
     {
-        //Make sure this is a file + the filename has 'error' in it.
-        if (entry.is_regular_file () && entry.path().filename().generic_string().find("error") != string::npos)
+        for (const auto &entry : filesystem::directory_iterator(errorLogPath))
         {
-            if (newestErrorLogPath.empty() || entry.last_write_time() > lastModifyTime)
+            //Make sure this is a file + the filename has 'error' in it.
+            if (entry.is_regular_file () && entry.path().filename().generic_string().find("error") != string::npos)
             {
-                lastModifyTime = entry.last_write_time();
-                newestErrorLogPath = entry.path();
+                if (newestErrorLogPath.empty() || entry.last_write_time() > lastModifyTime)
+                {
+                    lastModifyTime = entry.last_write_time();
+                    newestErrorLogPath = entry.path();
+                }
             }
+        }
+    }
+    catch (const filesystem::filesystem_error& e)
+    {
+        if (!silent->GetBool())
+        {
+            printf("[%s] Could not scan the error log folder: %s\n", SMEXT_CONF_NAME, e.what());
         }
     }
     return newestErrorLogPath;
