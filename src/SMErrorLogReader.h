@@ -26,7 +26,7 @@ class SMErrorLogReader
 	public:
 		IErrorLogEventReciever* EventReciever;
 
-		SMErrorLogReader(std::string& _errorLogPath, ConVar* _waitTime, ConVar* silent);
+		SMErrorLogReader(std::string& _errorLogPath, ConVar* _waitTime, ConVar* silent, IErrorLogEventReciever* eventReciever);
 		/// <summary>
 		/// Stop and join the error log watcher thread.
 		/// </summary>

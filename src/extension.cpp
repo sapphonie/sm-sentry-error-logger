@@ -148,8 +148,7 @@ void CTFErrorLogger::Setup()
     #else
             errorLogPath += "/logs";
     #endif
-            errorLogWatcher = make_unique<SMErrorLogReader> (errorLogPath, config->logReaderWaitTime, &ce_silent);
-            errorLogWatcher->EventReciever = &debugListener;
+            errorLogWatcher = make_unique<SMErrorLogReader> (errorLogPath, config->logReaderWaitTime, &ce_silent, &debugListener);
             Print("ErrorLogReader was setup.");
         }
     }

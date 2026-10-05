@@ -18,11 +18,13 @@ string ignoreStrings[] = {
     "Exception reported"
 };
 
-SMErrorLogReader::SMErrorLogReader (string &_errorLogPath, ConVar* _waitTime, ConVar* silent)
+SMErrorLogReader::SMErrorLogReader (string &_errorLogPath, ConVar* _waitTime, ConVar* silent, IErrorLogEventReciever* eventReciever)
 {
 	errorLogPath = _errorLogPath;
     waitTime = _waitTime;
     this->silent = silent;
+    //Set before the watcher thread starts, because the thread reads it.
+    EventReciever = eventReciever;
     filesystem::path newestErrorLogPath = GetLatestErrorLogPath();
     ifstream errorLog(newestErrorLogPath);
     string line;
