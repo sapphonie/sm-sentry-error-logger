@@ -105,15 +105,15 @@ SMErrorLogReader::~SMErrorLogReader()
 filesystem::path SMErrorLogReader::GetLatestErrorLogPath()
 {
     filesystem::path newestErrorLogPath;
-    filesystem::file_time_type* lastModifyTime = nullptr;
+    filesystem::file_time_type lastModifyTime;
     for (const auto &entry : filesystem::directory_iterator(errorLogPath))
     {
         //Make sure this is a file + the filename has 'error' in it.
         if (entry.is_regular_file () && entry.path().filename().generic_string().find("error") != string::npos)
         {
-            if (lastModifyTime == nullptr || entry.last_write_time() > *lastModifyTime)
+            if (newestErrorLogPath.empty() || entry.last_write_time() > lastModifyTime)
             {
-                lastModifyTime = &entry.last_write_time();
+                lastModifyTime = entry.last_write_time();
                 newestErrorLogPath = entry.path();
             }
         }
